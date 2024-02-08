@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Cloud Generator</title>
+    <!-- Include wordcloud.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-cloud@1"></script>
+</head>
+<body>
+    <h1>Word Cloud Generator</h1>
+    
+    <div>
+        <label for="inputText">Enter text:</label>
+        <textarea id="inputText" rows="5" cols="50"></textarea>
+        <br>
+        <button onclick="generateWordCloud()">Generate Word Cloud</button>
+    </div>
+
+    <div id="wordCloudContainer">
+        <!-- Word cloud will be rendered here -->
+    </div>
+
+    <script>
+        function generateWordCloud() {
+            // Get the input text
+            var inputText = document.getElementById('inputText').value;
+
+            // Split the input text into an array of words
+            var wordsArray = inputText.split(/\s+/);
+
+            // Count the occurrences of each word
+            var wordCounts = {};
+            wordsArray.forEach(function(word) {
+                wordCounts[word] = (wordCounts[word] || 0) + 1;
+            });
+
+            // Prepare data for word cloud
+            var wordCloudData = [];
+            for (var word in wordCounts) {
+                wordCloudData.push({text: word, size: wordCounts[word] * 10});
+            }
+
+            // Clear previous word cloud
+            document.getElementById('wordCloudContainer').innerHTML = '';
+
+            // Create the word cloud using wordcloud.js
+            d3.layout.cloud().size([500, 500])
+                .words(wordCloudData)
+                .padding(5)
+                .rotate(function() { return ~~(Math.random() * 2) * 90; })
+                .font("Impact")
+                .fontSize(function(d) { return d.size; })
+                .on("end", draw)
+                .start();
+
+            function draw(words) {
+                d3.select("#wordCloudContainer").append("svg")
+                    .attr("width", 500)
+                    .attr("height", 500)
+                    .append("g")
+                    .attr("transform", "translate(250,250)")
+                    .selectAll("text")
+                    .data(words)
+                    .enter().append("text")
+                    .style("font-size", function(d) { return d.size + "px"; })
+                    .style("font-family", "Impact")
+                    .style("fill", function(d, i) { return d3.schemeCategory10[i % 10]; })
+                    .attr("text-anchor", "middle")
+                    .attr("transform", function(d) {
+                        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                    })
+                    .text(function(d) { return d.text; });
+            }
+        }
+    </script>
+</body>
+</html>
