@@ -4,22 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Word Cloud Generator</title>
-    <!-- Include wordcloud.js library -->
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/d3@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/d3-cloud@1"></script>
 </head>
 <body>
-    <h1>Word Cloud Generator</h1>
-    
-    <div>
-        <label for="inputText">Enter text:</label>
-        <textarea id="inputText" rows="5" cols="50"></textarea>
-        <br>
-        <button onclick="generateWordCloud()">Generate Word Cloud</button>
-    </div>
+    <div class="container">
+        <header>
+            <h1>Word Cloud Generator</h1>
+        </header>
+        
+        <div class="input-container">
+            <label for="inputText">Enter text:</label>
+            <textarea id="inputText" rows="5" cols="50" placeholder="Type or paste your text here..."></textarea>
+            <br>
+            <button onclick="generateWordCloud()">Generate Word Cloud</button>
+        </div>
 
-    <div id="wordCloudContainer">
-        <!-- Word cloud will be rendered here -->
+        <div id="wordCloudContainer" class="word-cloud-container">
+            <!-- Word cloud will be rendered here -->
+        </div>
     </div>
 
     <script>
